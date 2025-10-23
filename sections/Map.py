@@ -291,10 +291,16 @@ def show_map(df):
             df_final = pd.DataFrame(columns=df.columns)
 
         # pie 
-        df_pie = (df_final.groupby(categories).size().reset_index(name="count"))
-        fig = camemberg(df_pie,categories)
-        st.plotly_chart(fig)
+        df_final["genres"] = df_final["genres"].apply(lambda x: ast.literal_eval(x) if isinstance(x, str) else x)
 
+        if categories == "genres":
+            df_genres = df_final.explode("genres")
+            df_pie = df_genres.groupby("genres").size().reset_index(name="count")
+        else:
+            df_pie = df_final.groupby(categories).size().reset_index(name="count")
+
+        fig = camemberg(df_pie, categories)
+        st.plotly_chart(fig)
     
         df_final = df_final.sort_values("first_release_date")
         st.write(f"Number of filtered games: {len(df_final)}")
