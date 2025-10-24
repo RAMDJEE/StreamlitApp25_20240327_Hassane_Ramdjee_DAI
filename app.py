@@ -106,6 +106,7 @@ st.session_state.theme = "light" if theme_choice == "light" else "dark"
 
 # Function to load CSS from the "assets" folder
 def load_css(file_path):
+    file_path = str(file_path)
     with open(file_path) as f:
         st.html(f"<style>{f.read()}</style>")
 # Load the external CSS
