@@ -11,11 +11,11 @@ from utils.visualisation_quantity import camemberg_genres
 from utils.visualisation_quantity import parallele_comp
 
 
-def show_quantity(df):
+def show_quantity(df,COLORS):
+    
     # Title and introduction 
     st.title("Number of Release")
 
-    # Introduction 
     st.markdown(
         """
         The quantity of video games released is closely linked to the notion of quality: the more games there are, the greater the potential impact on average ratings.
@@ -38,7 +38,7 @@ def show_quantity(df):
     )
 
     st.markdown(
-        """
+        f"""
         Before anything else, it is important to examine the number of games released each year, as this will serve as our baseline.  
         Initially, we considered **all the games in our database** to see how many were released per year (represented by the green graph). However, a major issue immediately arose: why was there such a huge spike around 2017? The data was clearly inconsistent.  
 
@@ -51,7 +51,7 @@ def show_quantity(df):
 
         Moving forward, instead of relying on raw release numbers, we will focus on **percentages of a category relative to the total releases per year**. This approach reduces the impact of such biases and allows for a more accurate comparison across years.  
 
-        <p style="font-style: italic; color: gray; margin-top: 10px;">
+        <p style="font-style: italic; color: {COLORS['subtext']}; margin-top: 10px;">
         Note: You can hover over the graphs to see the exact numbers, as these are interactive plots with hover functionality.
         </p>
         """,
@@ -63,15 +63,14 @@ def show_quantity(df):
     df_general = df.groupby(["first_release_date", "has_reliable_votes"]).size().reset_index(name="number_of_games")
     df_general = df_general[df_general["has_reliable_votes"] == True]
 
-    fig = plot_general(df_general,"red","Number of games released per year (with reliable vote)")
+    fig = plot_general(df_general, COLORS["negative"], "Number of games released per year (with reliable vote)")
     st.plotly_chart(fig)
 
     col1, col2 = st.columns([1,1])
 
     with col1:
         df_general_novote = df.groupby("first_release_date").size().reset_index(name="number_of_games")
-
-        fig = plot_general(df_general_novote,"green","Number of games released per year (with rating, reliable or not)")
+        fig = plot_general(df_general_novote, COLORS["positive"], "Number of games released per year (with rating, reliable or not)")
         st.plotly_chart(fig)
 
     with col2:
@@ -79,10 +78,8 @@ def show_quantity(df):
         totals = [1563, 1610, 1639, 1578, 1533, 1752, 1908, 2196, 2437, 2906,3021, 2968, 3090, 3286, 4282, 5517, 7626, 10303, 10961, 10259,11511, 13822, 13725, 16778, 20718, 16832]
         df_all_games = pd.DataFrame({"first_release_date": years,"number_of_games": totals})
         df_all_games["all_games"] = True
-
-        fig = plot_general(df_all_games,"blue","Number of games released per year")
+        fig = plot_general(df_all_games, COLORS["highlight"], "Number of games released per year")
         st.plotly_chart(fig)
-
 
     st.markdown("---")
 
@@ -116,33 +113,33 @@ def show_quantity(df):
         st.plotly_chart(fig)
 
     st.markdown(
-        """
+        f"""
         <div style="padding: 25px 35px; text-align: justify; font-size: 16px; line-height: 1.6;">
-            <p style="font-weight: bold; font-size: 18px; color: #553cc4; margin-bottom: 15px;">
+            <p style="font-weight: bold; font-size: 18px; color: {COLORS['highlight']}; margin-bottom: 15px;">
                 The Rise of Indie Games Over Time
             </p>
-            <p>
+            <p style="color:{COLORS['text']}">
                 In these graphs, we observe the <b>percentage of indie games</b> released each year 
                 compared to the total number of games published. 
                 Whether we include only titles with reliable votes or all available data, 
                 the conclusion remains the same: <b>the indie sector has exploded over the years</b>.
             </p>
-            <p>
+            <p style="color:{COLORS['text']}">
                 The share of indie games is noticeably higher when unreliable votes are included. 
                 This makes sense, as professional reviewers are often less likely to rate indie titles, 
                 which means the “unverified” category tends to include a much larger number of indie releases.
             </p>
-            <p>
+            <p style="color:{COLORS['text']}">
                 Interestingly, this growth suggests that <b>indie games could soon dominate the market</b> 
                 in terms of sheer volume. However, when considering only titles with reliable votes, 
                 journalists still appear to favor non-indie games, indicating a bias toward 
                 larger productions or more mainstream titles.
             </p>
-            <p>
+            <p style="color:{COLORS['text']}">
                 Overall, the data clearly illustrates how the indie scene has evolved 
                 from a niche segment to a <b>major driving force in the gaming industry</b>.
             </p>
-            <p style="font-style: italic; color: gray; margin-top: 10px;">
+            <p style="font-style: italic; color: {COLORS['subtext']}; margin-top: 10px;">
                 Note: You can hover over the graphs to see the exact values, 
                 as these are interactive plots with hover functionality.
             </p>
@@ -200,27 +197,27 @@ def show_quantity(df):
         st.plotly_chart(fig)
 
     st.markdown(
-        """
+        f"""
         <div style="padding: 25px 35px; text-align: justify; font-size: 16px; line-height: 1.6;">
-            <p style="font-weight: bold; font-size: 18px; color: #553cc4; margin-bottom: 15px;">
+            <p style="font-weight: bold; font-size: 18px; color: {COLORS['highlight']}; margin-bottom: 15px;">
                 Analysis of Game Genres Distribution
             </p>
-            <p>
+            <p style="color:{COLORS['text']}"> 
                 Here, we compare the <b>distribution of genres</b> across all released games. 
                 A noticeable difference emerges between titles with reliable votes and those without, 
                 echoing our previous analysis on indie games: the share of indie titles is particularly 
                 high when considering all games, regardless of whether they have been rated by professional reviewers.
             </p>
-            <p>
+            <p style="color:{COLORS['text']}">
                 Furthermore, we observe a clear dominance of <b>adventure games</b>, 
                 highlighting certain prevailing trends in player preferences and game development. 
                 This indicates that some genres consistently attract more releases and attention from developers.
             </p>
-            <p>
+            <p style="color:{COLORS['text']}">
                 It would be particularly interesting to explore how the distribution of these genres evolves over time, 
                 to identify emerging trends or shifts in gaming preferences.
             </p>
-            <p style="font-style: italic; color: gray; margin-top: 10px;">
+            <p style="font-style: italic; color: {COLORS['subtext']}; margin-top: 10px;">
                 Note: You can hover over the graphs to see the exact numbers, 
                 as these are interactive plots with hover functionality. 
                 You can also click on the legend items to hide or show specific genres dynamically, 
@@ -252,16 +249,16 @@ def show_quantity(df):
     st.markdown("---")
 
     st.markdown(
-        """
+        f"""
         <div style="padding: 25px 35px; text-align: justify; font-size: 16px; line-height: 1.6;">
-            <p style="font-weight: bold; font-size: 18px; color: #553cc4; margin-bottom: 15px;">
+            <p style="font-weight: bold; font-size: 18px; color: {COLORS['highlight']}; margin-bottom: 15px;">
                 Summary of Game Quantity Analysis
             </p>
-            <p>
+            <p style="color:{COLORS['text']}">
                 In this section, we can conclude the <b>Game Quantity</b> part by combining it with <b>Game Quality</b>. 
                 This graph provides a wealth of information, and we strongly encourage you to explore it in detail. 
             </p>
-            <p>
+            <p style="color:{COLORS['text']}">
                 For example, we notice that the majority of <b>reliable votes</b> are connected with <b>collections</b>, 
                 which shows that journalists follow licensed titles much more closely than independent games.
                 We also observe that most games rated <b>90+</b> are linked to licensed titles, 
@@ -275,7 +272,7 @@ def show_quantity(df):
                 and <b>remasters</b> with more than 20 DLCs are mainly highly rated normal games, 
                 although some remasters are present (but no remakes in this category).
             </p>
-            <p style="font-style: italic; color: gray; margin-top: 10px;">
+            <p style="font-style: italic; color: {COLORS['subtext']}; margin-top: 10px;">
                 Note for reading the graph:<br>
                 - You can reorder the columns in any way you want.<br>
                 - You can rearrange the zones within a column from top to bottom as you prefer.<br>

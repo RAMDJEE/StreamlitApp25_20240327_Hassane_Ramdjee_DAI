@@ -1,19 +1,21 @@
 import streamlit as st
 
-def show_conclusion(df):
+def show_conclusion(df,COLORS):
     with st.container(key="intro"):
         st.title("Conclusion and Future Perspectives")
         st.subheader("Reflecting on the Evolution of Video Games")
 
         st.markdown(
-            """
+            f"""
+            <div style="color:{COLORS['text']}">
             Over the course of this exploration, we analyzed how video games have evolved 
-            between **2000 and 2025**, using data from the **IGDB (Internet Games Database)**, 
+            between <strong>2000 and 2025</strong>, using data from the <strong>IGDB (Internet Games Database)</strong>, 
             an open and publicly available database maintained by the gaming community and developers.  
 
-            This dataset was used under its open data policy and for purely **educational and analytical purposes**.  
+            This dataset was used under its open data policy and for purely <strong>educational and analytical purposes</strong>.  
             All information shown here (publishers, developers, genres, platforms, etc.) comes directly from IGDB, 
             which grants access for non-commercial data visualization and research projects.
+            </div>
             """,
             unsafe_allow_html=True
         )
@@ -22,9 +24,9 @@ def show_conclusion(df):
 
     with st.container():
         st.markdown(
-            """
-            <div style="text-align: center; font-size: 16px; line-height: 1.6; margin-top: 20px;">
-                <p style="font-weight: bold; font-size: 18px; color: #553cc4; margin-bottom: 15px;">
+            f"""
+            <div style="text-align: center; font-size: 16px; line-height: 1.6; margin-top: 20px; color:{COLORS['text']}">
+                <p style="font-weight: bold; font-size: 18px; color: {COLORS['highlight']}; margin-bottom: 15px;">
                     Areas for Improvement and Future Research
                 </p>
                 <p>
@@ -58,15 +60,15 @@ def show_conclusion(df):
 
     with st.container():
         st.markdown(
-            """
-            <div style="text-align: center; font-size: 16px; line-height: 1.6; margin-top: 20px;">
+            f"""
+            <div style="text-align: center; font-size: 16px; line-height: 1.6; margin-top: 20px; color:{COLORS['text']}">
                 <p>
                     <strong>Thank you for exploring the world of video games!</strong>  
                     This Streamlit app was created as a data storytelling project, combining 
                     statistics, visualization, and interactivity to highlight how the video game 
                     industry has evolved over the past 25 years.
                 </p>
-                <p style="font-style: italic; color: gray; margin-top: 10px;">
+                <p style="font-style: italic; color:{COLORS['subtext']}; margin-top: 10px;">
                     Data cleaning and preprocessing performed in Python / Jupyter Notebook.  
                     Visualization and interface developed with Streamlit, Plotly and Seaborn.
                 </p>
@@ -74,4 +76,3 @@ def show_conclusion(df):
             """,
             unsafe_allow_html=True
         )
-

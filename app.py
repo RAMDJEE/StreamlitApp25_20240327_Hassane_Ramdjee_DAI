@@ -12,15 +12,6 @@ from sections.quantity import show_quantity
 from sections.Map import show_map
 from sections.conclusion import show_conclusion
 
-
-# Function to load CSS from the "assets" folder
-def load_css(file_path):
-    with open(file_path) as f:
-        st.html(f"<style>{f.read()}</style>")
-# Load the external CSS
-css_path = pathlib.Path("assets/intro.css")
-load_css(css_path)
-
 # Config page 
 st.set_page_config(
     page_title="21st Century Gaming",
@@ -99,16 +90,71 @@ if st.sidebar.button("Developer and Publisher"):
 if st.sidebar.button("Conclusion"):
     st.session_state.page = "Conclusion"
 
+st.sidebar.divider()
+
+if "theme" not in st.session_state:
+    st.session_state.theme = "light"
+
+theme_choice = st.sidebar.radio(
+    "Choose a theme:",
+    ("light", "dark"),
+    index=0 if st.session_state.theme == "light" else 1
+)
+
+st.session_state.theme = "light" if theme_choice == "light" else "dark"
+
+
+# Function to load CSS from the "assets" folder
+def load_css(file_path):
+    with open(file_path) as f:
+        st.html(f"<style>{f.read()}</style>")
+# Load the external CSS
+if st.session_state.theme == "light":
+    css_path = pathlib.Path("assets/light.css")
+else:
+    css_path = pathlib.Path("assets/dark.css")
+load_css(css_path)
+
+if st.session_state.theme == "dark":
+    COLORS = {
+        "positive": "#21A671",
+        "light_positive": "#57c48b",
+        "neutral": "#fff5a0",
+        "negative": "#f58c8c",
+        "text": "#f5f5f5",
+        "subtext": "#cccccc",
+        "highlight": "#4e79a7",
+        "card_bg": "#1e1e1e",
+        "badge_text": "white",
+    }
+else:
+    COLORS = {
+        "positive": "#21A671",
+        "light_positive": "#a0e7a0",
+        "neutral": "#fff5a0",
+        "negative": "#f5a0a0",
+        "text": "#333333",
+        "subtext": "#666666",
+        "highlight": "#4e79a7",
+        "card_bg": "#f5f5f5",
+        "badge_text": "black",
+    }
+
+st.sidebar.markdown(
+    f"I recommend using the light theme, as the site was built with it. There are some visual bugs in dark mode."
+)
+
+
 # Display page based on selection
 if st.session_state.page == "Home":
-    show_home(df)
+    show_home(df,COLORS)
 elif st.session_state.page == "Metrics":
-    show_metrics_quality(df)
+    show_metrics_quality(df,COLORS)
 elif st.session_state.page == "Ratings":
-    show_notes(df) 
+    show_notes(df,COLORS) 
 elif st.session_state.page == "Quantity":
-    show_quantity(df)
+    show_quantity(df,COLORS)
 elif st.session_state.page == "Map":
-    show_map(df)
+    show_map(df,COLORS)
 elif st.session_state.page == "Conclusion":
-    show_conclusion(df)
+    show_conclusion(df,COLORS)

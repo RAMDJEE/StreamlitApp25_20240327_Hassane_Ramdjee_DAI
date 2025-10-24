@@ -10,11 +10,12 @@ from utils.visualisation_map import map_general_year
 from utils.visualisation_map import camemberg
 
 
-def show_map(df):
+def show_map(df,COLORS):
+
     st.title("The world of video games: Developer and Publisher")
 
     st.markdown(
-        """
+        f"""
         On this page, we will take a closer look at the distribution of video games across different domains. Understanding **who makes and who publishes games** is crucial, as it reveals patterns of creativity, market dynamics, and the global influence of the video game industry.  
 
         This page is divided into two main parts:
@@ -28,7 +29,7 @@ def show_map(df):
         unsafe_allow_html=True
     )
 
-    map1, gen = st.columns([0.75,0.25])
+    map1, gen = st.columns([0.75, 0.25])
 
     # explode list of country (developer and publisher)
     def explode_country(df_proc, country, type, by_year=False):
@@ -111,9 +112,9 @@ def show_map(df):
         st.plotly_chart(fig)
     
     st.markdown(
-        """
-        <div style="padding: 25px 35px; text-align: justify; font-size: 16px; line-height: 1.6;">
-            <p style="font-weight: bold; font-size: 18px; color: #553cc4; margin-bottom: 15px;">
+        f"""
+        <div style="padding: 25px 35px; text-align: justify; font-size: 16px; line-height: 1.6; color: {COLORS['text']}">
+            <p style="font-weight: bold; font-size: 18px; color: {COLORS['highlight']}; margin-bottom: 15px;">
                 Global Video Game Market Dominance
             </p>
             <p>
@@ -130,7 +131,7 @@ def show_map(df):
                 emerging from these regions. Nevertheless, the United States also sees a strong increase, 
                 further confirming its role in market dominance.
             </p>
-            <p style="font-style: italic; color: gray; margin-top: 10px;">
+            <p style="font-style: italic; color: {COLORS['subtext']}; margin-top: 10px;">
                 Notes:<br>
                 - For reliable votes only, no country data is missing.<br>
                 - When combining reliable and non-reliable votes, about a quarter of the database is missing, 
@@ -143,14 +144,12 @@ def show_map(df):
         unsafe_allow_html=True
     )
 
-
     st.markdown("---")
 
-
     st.markdown(
-        """
-        <div style="padding: 25px 35px; text-align: justify; font-size: 16px; line-height: 1.6;">
-            <p style="font-weight: bold; font-size: 18px; color: #d43838; margin-bottom: 15px;">
+        f"""
+        <div style="padding: 25px 35px; text-align: justify; font-size: 16px; line-height: 1.6; color: {COLORS['text']}">
+            <p style="font-weight: bold; font-size: 18px; color: {COLORS['highlight']}; margin-bottom: 15px;">
                 Detailed Exploration of Developer and Platform Releases
             </p>
             <p>

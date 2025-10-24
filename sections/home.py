@@ -2,14 +2,15 @@
 import streamlit as st
 import ast
 
-def show_home(df):
+def show_home(df,COLORS):
+    
     # Introduction
     with st.container(key="intro"):
         st.title("The Evolution of Video Games in the 21st Century")
         st.subheader("Gaming Habits in Transformation")
 
         st.markdown(
-            """
+            f"""
             Using the open-source **IGDB** database, we collected more than **29,000 video games** released between **January 1, 2000** and **October 1, 2025**.  
             Only games containing all the key features we needed were kept, particularly those with player ratings and/or Metacritic scores.
 
@@ -17,7 +18,7 @@ def show_home(df):
 
             **In this first section, feel free to explore the dataset.**
                                         
-            <p style="font-style: italic; color: gray; margin-top: 10px;">
+            <p style="font-style: italic; color: {COLORS['subtext']}; margin-top: 10px;">
             Note: in our database, we have main games, remakes, remasters, and standalones, but not ports. Therefore, all definitive editions or simple PC ports are not included.
             </p>
             """,
@@ -35,9 +36,8 @@ def show_home(df):
             else:
                 return []  
 
-
     with st.container(key="zone-jeu"):
-        # he search bar
+        # the search bar
         col1, col2 = st.columns([0.8, 0.2])  
 
         with col1:
@@ -50,9 +50,15 @@ def show_home(df):
             if game_name:
                 results = df[df['name'].str.contains(game_name, case=False)]
                 if results.empty:
-                    st.markdown('<div class="no-results">No games</div>', unsafe_allow_html=True)
+                    st.markdown(
+                        f'<div class="no-results" style="color:{COLORS["negative"]};">No games</div>',
+                        unsafe_allow_html=True
+                    )
                 else:
-                    st.markdown(f'<div class="results-count">{len(results)} games found</div>', unsafe_allow_html=True)
+                    st.markdown(
+                        f'<div class="results-count" style="color:{COLORS["positive"]};">{len(results)} games found</div>',
+                        unsafe_allow_html=True
+                    )
 
     # If the game is found
     if game_name and not results.empty:
@@ -63,7 +69,7 @@ def show_home(df):
 
             # Display game name
             if(game_data["early_access"]):
-                st.subheader(f"{game_data["name"]} (early access)")
+                st.subheader(f"{game_data['name']} (early access)")
             else:
                 st.subheader(game_data["name"])
 
@@ -112,38 +118,38 @@ def show_home(df):
             
                 # Display collection / remake / remaster
                 collection = game_data.get("has_collections")
-                collection_color = "#a0e7a0" if collection else "#f5a0a0"
+                collection_color = COLORS["light_positive"] if collection else COLORS["negative"]
                 collection_text = "Y" if collection else "N"
                 badges_html = f'<div style="margin-top:5px; display:flex; align-items:center; gap:10px; justify-content:center;">'
                 badges_html += f'<span>Part of a collection?</span>'
-                badges_html += f'<span style="background-color:{collection_color}; border-radius:10px; padding:5px 10px; font-weight:bold; color:black;">{collection_text}</span>'
+                badges_html += f'<span style="background-color:{collection_color}; border-radius:10px; padding:5px 10px; font-weight:bold; color:{COLORS["badge_text"]};">{collection_text}</span>'
                 badges_html += '</div>'
 
                 # Only for Main Game
                 if game_data.get("game_type") == "Main Game":
                     # Remake
                     has_remake = game_data.get("remake", False)
-                    remake_color = "#a0e7a0" if has_remake else "#f5a0a0"
+                    remake_color = COLORS["light_positive"] if has_remake else COLORS["negative"]
                     remake_text = "Y" if has_remake else "N"
                     badges_html += f'<div style="margin-top:5px; display:flex; align-items:center; gap:10px; justify-content:center;">'
                     badges_html += f'<span>Has a remake?</span>'
-                    badges_html += f'<span style="background-color:{remake_color}; border-radius:10px; padding:5px 10px; font-weight:bold; color:black;">{remake_text}</span>'
+                    badges_html += f'<span style="background-color:{remake_color}; border-radius:10px; padding:5px 10px; font-weight:bold; color:{COLORS["badge_text"]};">{remake_text}</span>'
                     badges_html += '</div>'
 
                     # Remaster
                     has_remaster = game_data.get("remaster", False)
-                    remaster_color = "#a0e7a0" if has_remaster else "#f5a0a0"
+                    remaster_color = COLORS["light_positive"] if has_remaster else COLORS["negative"]
                     remaster_text = "Y" if has_remaster else "N"
                     badges_html += f'<div style="margin-top:5px; display:flex; align-items:center; gap:10px; justify-content:center;">'
                     badges_html += f'<span>Has a remaster?</span>'
-                    badges_html += f'<span style="background-color:{remaster_color}; border-radius:10px; padding:5px 10px; font-weight:bold; color:black;">{remaster_text}</span>'
+                    badges_html += f'<span style="background-color:{remaster_color}; border-radius:10px; padding:5px 10px; font-weight:bold; color:{COLORS["badge_text"]};">{remaster_text}</span>'
                     badges_html += '</div>'
                 st.markdown(badges_html, unsafe_allow_html=True)
 
                 # Display developers
                 developers = safe_eval(game_data.get("developer_company"))
                 developers_country = safe_eval(game_data.get("developer_country"))
-                html_developers = '<div style="margin-top: 15px;"><strong>Developers:</strong><br>'
+                html_developers = f'<div style="margin-top: 15px; color:{COLORS["text"]};"><strong>Developers:</strong><br>'
                 for i, dev in enumerate(developers):
                     country = developers_country[i] if i < len(developers_country) else "N/A"
                     html_developers += f"- {dev} ({country})<br>"
@@ -153,7 +159,7 @@ def show_home(df):
                 # Display publishers
                 publishers = safe_eval(game_data.get("publisher_company"))
                 publishers_country = safe_eval(game_data.get("publisher_country"))
-                html_publishers = '<div style="margin-top: 5px;"><strong>Publishers:</strong><br>'
+                html_publishers = f'<div style="margin-top: 5px; color:{COLORS["text"]};"><strong>Publishers:</strong><br>'
                 for i, pub in enumerate(publishers):
                     country = publishers_country[i] if i < len(publishers_country) else "N/A"
                     html_publishers += f"- {pub} ({country})<br>"
@@ -162,7 +168,7 @@ def show_home(df):
 
                 # Display game mod
                 game_mod = safe_eval(game_data.get("game_modes"))
-                html_game_mod = '<div style="margin-top: 15px;"><strong>Game mod:</strong><br>'
+                html_game_mod = f'<div style="margin-top: 15px; color:{COLORS["text"]};"><strong>Game mod:</strong><br>'
                 for i in game_mod:
                     html_game_mod += f"- {i}<br>"
                 html_game_mod += "</div>"
@@ -170,7 +176,7 @@ def show_home(df):
 
                 # Display perspectives
                 player_perspectives = safe_eval(game_data.get("player_perspectives"))
-                html_player_perspectives = '<div style="margin-top: 5px;"><strong>Player perspectives:</strong><br>'
+                html_player_perspectives = f'<div style="margin-top: 5px; color:{COLORS["text"]};"><strong>Player perspectives:</strong><br>'
                 for i in player_perspectives:
                     html_player_perspectives += f"- {i}<br>"
                 html_player_perspectives += "</div>"
@@ -180,13 +186,13 @@ def show_home(df):
                 # Display total rating
                 total_rating = round(game_data.get("total_rating", 0))
                 if total_rating >= 90:
-                    bg_color = "#21A671"  
+                    bg_color = COLORS["positive"]  
                 elif total_rating >= 75:
-                    bg_color = "#a0e7a0"  
+                    bg_color = COLORS["light_positive"]  
                 elif total_rating >= 60:
-                    bg_color = "#fff5a0"  
+                    bg_color = COLORS["neutral"]  
                 else:
-                    bg_color = "#f5a0a0" 
+                    bg_color = COLORS["negative"] 
                 st.markdown(
                     f"""
                     <span style="display: inline-flex; align-items: center; gap: 10px;">
@@ -196,7 +202,7 @@ def show_home(df):
                             border-radius: 10px;
                             padding: 5px 10px;
                             font-weight: bold;
-                            color: black;
+                            color: {COLORS['badge_text']};
                         ">
                             {total_rating} / 100
                         </span>
@@ -207,16 +213,22 @@ def show_home(df):
 
                 # Display age ranking
                 age_rating = game_data.get("age_rattings")
-                if age_rating.lower() in ["everyone"]:
-                    badge_color = "#a0e7a0" 
-                elif age_rating.lower() in ["child"]:
-                    badge_color = "#add8e6" 
-                elif age_rating.lower() in ["teen"]:
-                    badge_color = "#fff5a0" 
-                elif age_rating.lower() in ["young"]:
-                    badge_color = "#ffa500"  
-                elif age_rating.lower() in ["18+"]:
-                    badge_color = "#f5a0a0"  
+                if isinstance(age_rating, str):
+                    if age_rating.lower() in ["everyone"]:
+                        badge_color = COLORS["light_positive"]
+                    elif age_rating.lower() in ["child"]:
+                        badge_color = "#add8e6" 
+                    elif age_rating.lower() in ["teen"]:
+                        badge_color = COLORS["neutral"]
+                    elif age_rating.lower() in ["young"]:
+                        badge_color = "#ffa500"  
+                    elif age_rating.lower() in ["18+"]:
+                        badge_color = COLORS["negative"]  
+                    else:
+                        badge_color = COLORS["neutral"]
+                else:
+                    badge_color = COLORS["neutral"]
+
                 st.markdown(
                     f"""
                     <span style="display: inline-flex; align-items: center; gap: 10px; margin-top: 10px">
@@ -226,7 +238,7 @@ def show_home(df):
                             border-radius: 10px;
                             padding: 5px 10px;
                             font-weight: bold;
-                            color: black;
+                            color: {COLORS['badge_text']};
                         ">
                             {age_rating}
                         </span>
@@ -238,7 +250,7 @@ def show_home(df):
                 # Display platform 
                 platforms = safe_eval(game_data.get("platforms"))
                 platform_family = safe_eval(game_data.get("platform_family"))
-                html_platforms = '<div style="margin-top: 15px;"><strong>Platforms:</strong><br>'
+                html_platforms = f'<div style="margin-top: 15px; color:{COLORS["text"]};"><strong>Platforms:</strong><br>'
                 for i, plat in enumerate(platforms):
                     family = platform_family[i] if i < len(platform_family) else "N/A"
                     html_platforms += f"- {plat} ({family})<br>"
@@ -247,7 +259,7 @@ def show_home(df):
 
                 # Display type platform
                 platform_type = safe_eval(game_data.get("platform_type"))
-                html_platforms_type = '<div style="margin-top: 5px; margin-bottom: 5px"><strong>Platform type:</strong><br>'
+                html_platforms_type = f'<div style="margin-top: 5px; margin-bottom: 5px; color:{COLORS["text"]};"><strong>Platform type:</strong><br>'
                 for i in platform_type:
                     html_platforms_type += f"- {i}<br>"
                 html_platforms_type += "</div>"
@@ -260,20 +272,20 @@ def show_home(df):
 
                 # Display type genre
                 genre = safe_eval(game_data.get("genres"))
-                html_genre = '<div style="margin-bottom: 15px"><strong>Genres:</strong><br>'
+                html_genre = f'<div style="margin-bottom: 15px; color:{COLORS["text"]};"><strong>Genres:</strong><br>'
                 for i in genre:
                     html_genre += f"- {i}<br>"
                 html_genre += "</div>"
                 st.markdown(html_genre, unsafe_allow_html=True)
 
                 # Display dlcs
-                st.write(f"Number dlcs: {game_data.get("dlcs")}")
+                st.write(f"Number dlcs: {game_data.get('dlcs')}")
 
     st.markdown("---")
 
     st.markdown(
-        """
-        <div style="text-align: center; margin-top: 10px; margin-bottom: 3vh; font-style: italic;">
+        f"""
+        <div style="text-align: center; margin-top: 10px; margin-bottom: 3vh; font-style: italic; color:{COLORS["subtext"]};">
         Data preprocessing and feature extraction were carried out in a separate Jupyter Notebook to ensure data quality and reproducibility.  
         The Streamlit app focuses on storytelling and interactivity, using the cleaned dataset for smooth exploration and visualization.
         </div>

@@ -10,24 +10,28 @@ from utils.visualisation_quality import plot_average_rating_companies_exclu
 from utils.visualisation_quality import plot_top10
 from utils.visualisation_quality import camembert_grouped
 
-def show_notes(df):
+def show_notes(df,COLORS):
+
     # Title and introduction 
     st.title("Distribution of Ratings")
 
     # Introduction
     st.markdown(
-        """
+        f"""
+        <div style="color:{COLORS['text']}">
         One of the central aspects of video games lies in the ratings they receive. 
         These ratings give us a first idea of a game's quality. 
-        But a legitimate question to ask is: *"How can game criteria influence ratings?"* 
+        But a legitimate question to ask is: <em>"How can game criteria influence ratings?"</em> 
         From this, we can observe trends throughout the 21st century that may emerge.
         
-        **Note:** 
+        <strong>Note:</strong> 
         - Ratings in our database are divided by reliability. A rating that averages professional and player scores is considered reliable.
         - Some ratings come from IGDB (which manages this database) due to a lack of professional reviews and are therefore less reliable. 
         Ratings based solely on player scores are considered unreliable. 
         By checking the box below, you will only use the most reliable ratings, but be aware that they cover only about a quarter of the database.
-        """
+        </div>
+        """,
+        unsafe_allow_html=True
     )
 
     # Interactive filter
@@ -35,12 +39,15 @@ def show_notes(df):
 
     # First graph
     st.markdown(
-        """
+        f"""
+        <div style="color:{COLORS['text']}">
         Our working dataset in this study will be the average game ratings per year. 
         This will allow us to observe the evolution over time, as well as the distribution across genres, developers, etc.
 
         But let's start with the basics and look at the yearly averages first!
-        """
+        </div>
+        """,
+        unsafe_allow_html=True
     )
 
     # We calculate the average and store it
@@ -51,8 +58,8 @@ def show_notes(df):
 
     # Analyse 
     st.markdown(
-        """
-        <div style="margin-bottom: 3vh;">
+        f"""
+        <div style="margin-bottom: 3vh; color:{COLORS['text']}">
         On this graph, we see a similar trend whether or not we filter for reliable votes: in the last five years, the <strong>average video game ratings</strong> have been higher than the <strong>global average</strong> (dashed line) over the past 25 years.  
         This is interesting because, in popular opinion, it is often said that the quality of games has declined in recent years.  
         Do these ratings truly reflect game quality? At this stage, we cannot say for sure, and further analysis will be needed.  
@@ -65,7 +72,9 @@ def show_notes(df):
 
     # Display : Average Game Rating by Release Year
     fig = plot_average_rating(mean_by_year, only_reliable)
-    st.pyplot(fig)
+    scol1, col2, col3 = st.columns([1,3,1])
+    with col2:
+        st.pyplot(fig)
 
     st.markdown("---")
 
@@ -89,32 +98,32 @@ def show_notes(df):
             collection_count = (filtered_df_collections.groupby(["first_release_date", "has_collections"]).size().reset_index(name="count").pivot(index="first_release_date", columns="has_collections", values="count").astype(int).rename(columns={True: "Collections", False: "Non-Collections"}))
         else:
             collection_count = (df_rating_collect.groupby(["first_release_date", "has_collections"]).size().reset_index(name="count").pivot(index="first_release_date", columns="has_collections", values="count").astype(int).rename(columns={True: "Collections", False: "Non-Collections"}))
-        st.markdown("### Number of Games per Year (Collections)")
+        st.markdown(f"### <span style='color:{COLORS['text']}'>Number of Games per Year (Collections)</span>", unsafe_allow_html=True)
         st.dataframe(collection_count, use_container_width=True)
-    
+
     # Analyse
     st.markdown(
-        """
+        f"""
         <div style=" padding: 25px 35px; text-align: justify; font-size: 16px; line-height: 1.6;">
-            <p style="font-weight: bold; font-size: 18px; color: #553cc4; margin-bottom: 15px;">
+            <p style="font-weight: bold; font-size: 18px; color: {COLORS['highlight']}; margin-bottom: 15px;">
                 Games in a Collection vs Standalone Titles
             </p>
-            <p>
+            <p style="color:{COLORS['text']}">
                 On this graph, we can observe the ratings depending on whether a game is part of a collection,
                 meaning whether other games exist within the same universe. 
                 The interesting point in this study is to see whether being part of a collection actually influences ratings, 
                 and indeed it does: across all years, games that belong to a collection consistently have 
                 higher average ratings than standalone titles. 
             </p>
-            <p>
+            <p style="color:{COLORS['text']}">
                 This can be explained by several factors such as brand popularity, 
                 an already well-established gameplay formula, or player familiarity with the universe.
             </p>
-            <p>
+            <p style="color:{COLORS['text']}">
                 Nevertheless, whether a game is part of a collection or not, 
                 the general trend over time remains the same: a steady increase in average ratings.
             </p>
-            <p>
+            <p style="color:{COLORS['text']}">
                 We have also added a small section on the <b>number of games released per year</b> on the side, 
                 to highlight a potential bias in interpretation. 
                 We will explore this aspect in more detail in a later section, 
@@ -149,43 +158,43 @@ def show_notes(df):
             indie_counts = (filtered_df_genres.groupby(["first_release_date", "is_indie"]).size().reset_index(name="count").pivot(index="first_release_date", columns="is_indie", values="count").fillna(0).astype(int).rename(columns={True: "Indie", False: "Non-Indie"}))
         else:
             indie_counts = (df_rating_genres.groupby(["first_release_date", "is_indie"]).size().reset_index(name="count").pivot(index="first_release_date", columns="is_indie", values="count").astype(int).rename(columns={True: "Indie", False: "Non-Indie"}))
-        st.markdown("### Number of Games per Year (Indie)")
+        st.markdown(f"### <span style='color:{COLORS['text']}'>Number of Games per Year (Indie)</span>", unsafe_allow_html=True)
         st.dataframe(indie_counts, use_container_width=True) 
 
     # Analyse
     st.markdown(
-        """
+        f"""
         <div style="padding: 25px 35px; text-align: justify; font-size: 16px; line-height: 1.6;">
-            <p style="font-weight: bold; font-size: 18px; color: #924ea7; margin-bottom: 15px;">
+            <p style="font-weight: bold; font-size: 18px; color: {COLORS['highlight']}; margin-bottom: 15px;">
                 Indie Games vs Non-Indie Titles
             </p>
-            <p>
+            <p style="color:{COLORS['text']}">
                 In this graph, we focus on <b>Indie games</b> and how their ratings compare to non-indie titles over time. 
                 It’s particularly interesting to look at both the filtered and unfiltered views regarding reliable votes, 
                 since most titles affected by this filter belong to the indie category. 
                 We can also note that the number of games marked as reliable is significantly low (see the table on the right). 
                 This highlights that indie games in the early 2000s were not popular at all, resulting in a complete absence of professional ratings (which we will revisit later).
             </p>
-            <p>
+            <p style="color:{COLORS['text']}">
                 Therefore, the early 2000s must be interpreted carefully, as this biases the average rating. 
                 From 2010 onward, the ratings between indie and non-indie games remain fairly close, 
                 although indie games fall behind non-indie games in 2015. 
             </p>
-            <p>
+            <p style="color:{COLORS['text']}">
                 This can be explained by the <b>rapid growth of the indie scene</b> in recent years: 
                 a higher volume of indie releases also brings greater variability in quality, 
                 as many creators attempt to develop games without extensive experience or resources. 
             </p>
-            <p>
+            <p style="color:{COLORS['text']}">
                 However, the recent surge in popularity is also reflected in the ratings of recent years, 
                 where indie games manage to match or even surpass non-indie titles.
             </p>
-            <p>
+            <p style="color:{COLORS['text']}">
                 Despite these differences, the overall trend remains consistent: 
                 average ratings have been <b>steadily increasing over the years</b>, 
                 regardless of whether a game is indie or not.
             </p>
-            <p>
+            <p style="color:{COLORS['text']}">
                 This confirms the broader observation that <b>the general upward trend in ratings</b> 
                 applies to all game categories: collected or not, indie or not.
             </p>
@@ -223,42 +232,42 @@ def show_notes(df):
         st.pyplot(fig)
 
     st.markdown(
-        """
+        f"""
         <div style="padding: 25px 35px; text-align: justify; font-size: 16px; line-height: 1.6;">
-            <p style="font-weight: bold; font-size: 18px; color: #4e79a7; margin-bottom: 15px;">
+            <p style="font-weight: bold; font-size: 18px; color: {COLORS['highlight']}; margin-bottom: 15px;">
                 Game Ratings by Platform & Exclusivity
             </p>
-            <p>
+            <p style="color:{COLORS['text']}">
                 In this section, we examine the <b>average ratings per game platform</b>. 
                 Naturally, quality is influenced by quantity, but we will address volume in a separate section; 
                 here, we focus purely on the ratings themselves.
             </p>
-            <p>
+            <p style="color:{COLORS['text']}">
                 We differentiate between <b>exclusive</b> and <b>non-exclusive</b> games, meaning whether a title is available 
                 only on the platform in question and nowhere else. 
                 Note that by "platform" we refer to the platform family: 
                 a game released on both PS4 and PS5 is considered an exclusive for this analysis.
             </p>
-            <p>
+            <p style="color:{COLORS['text']}">
                 Trends vary by company, and we encourage exploration of the dataset. 
                 However, we can observe that console prestige, particularly <b>Nintendo</b> and <b>PlayStation</b>, 
                 is reflected in very high ratings for exclusives. 
                 Conversely, platforms considered in decline, such as <b>Sega</b> and <b>Microsoft</b>, 
                 often show weak or non-existent exclusive ratings.
             </p>
-            <p>
+            <p style="color:{COLORS['text']}">
                 Nevertheless, this dominance of exclusives can vary significantly depending on whether the ratings are considered reliable or not. 
                 We strongly encourage examining both views during analyses. Exclusive games tend to always receive professional reviews, 
                 which substantially affects average ratings and the presence of games in the dataset.
             </p>
-            <p>
+            <p style="color:{COLORS['text']}">
                 For <b>Windows</b>, the parity between exclusive and non-exclusive ratings is largely due to the presence of indie games 
                 (PC exclusives) and multi-platform titles. 
                 Windows highlights the overall upward trend in ratings observed throughout this analysis, 
                 especially when including all games, not just those with reliable votes. 
                 This effect is further accentuated by Nintendo and PlayStation, which continue to drive the trend upward.
             </p>
-            <p>
+            <p style="color:{COLORS['text']}">
                 Of course, Nintendo and PlayStation also achieve such high ratings because the number of exclusive games released each year is relatively low (a topic we’ll explore in the next section): fewer titles, but almost flawless quality.
             </p>
         </div>
@@ -269,18 +278,18 @@ def show_notes(df):
     st.markdown("---")
 
     st.markdown(
-        """
+        f"""
         <div style="padding: 25px 35px; text-align: justify; font-size: 16px; line-height: 1.6;">
-            <p style="font-weight: bold; font-size: 18px; color: #4e79a7; margin-bottom: 15px;">
+            <p style="font-weight: bold; font-size: 18px; color:{COLORS['highlight']}; margin-bottom: 15px;">
                 Visualizations of Distributions
             </p>
-            <p>
+            <p style="color:{COLORS['text']}">
                 Here, you can freely explore the distribution of age classes, the share of collections, and whether games are solo or multiplayer. Games are ranked according to their top ratings. 
             </p>
-            <p>
+            <p style="color:{COLORS['text']}">
                 Therefore, if you set "1000" on the slider, the top 1000 will be displayed, and you can view the distribution you want to examine. 
             </p>
-            <p>
+            <p color: {COLORS['subtext']}>
                 Note that, once again, <b>reliable votes</b> influence the top rankings you can view.
             </p>
         </div>
@@ -333,27 +342,27 @@ def show_notes(df):
 
     with colpie:
         fig = camembert_grouped(df_pie,number,category_choice,category_map,pretty_labels,only_reliable)
-        st.pyplot(fig)
+        st.plotly_chart(fig)
 
 
     st.markdown("---")
 
     # TOP 15
     st.markdown(
-        """
+        f"""
         <div style="padding: 25px 35px; text-align: justify; font-size: 16px; line-height: 1.6;">
-            <p style="font-weight: bold; font-size: 18px; color: #4e79a7; margin-bottom: 15px;">
+            <p style="font-weight: bold; font-size: 18px; color: {COLORS['highlight']}; margin-bottom: 15px;">
                 Top 15 Games by Category
             </p>
-            <p>
+            <p style="color:{COLORS['text']}">
                 To conclude this section, we present four Top 15 lists, providing statistics on which games dominate ratings within their category. 
                 It is strongly recommended to enable <b>only reliable votes</b>, since games with unreliable ratings can appear artificially high due to having very few public votes. 
             </p>
-            <p>
+            <p style="color:{COLORS['text']}">
                 The four Top 15 lists are as follows: games that are part of a collection, games that are not part of any collection, 
                 indie games, and console exclusives. This allows for a more nuanced view of which titles consistently perform well across different segments of the gaming landscape.
             </p>
-            <p style="font-style: italic; color: gray; margin-top: 10px;">
+            <p style="font-style: italic; color:{COLORS['subtext']}; margin-top: 10px;">
                 Note: If you have trouble reading due to your screen, remember that by hovering your mouse over the graph, you can view it in fullscreen.
             </p>
         </div>

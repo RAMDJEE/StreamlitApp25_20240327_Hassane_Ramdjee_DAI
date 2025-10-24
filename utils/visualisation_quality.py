@@ -5,6 +5,7 @@
 import seaborn as sns
 import pandas as pd
 import matplotlib.pyplot as plt
+import plotly.express as px
 
 
 def plot_average_rating(df, excluded_categories=False):
@@ -294,12 +295,12 @@ def plot_top10(df, palette, excluded_categories=False):
 
 def camembert_grouped(df, number, category_key, category_map, label_map=None, excluded_categories=False):
     """
-    Displays a pie chart for a group of boolean columns:
+    Displays a pie chart for a group of boolean columns using Plotly Express:
     - 'has_collections' -> True / False
     - 'game_modes' -> single / multi / both / other
     - 'age_ratings' -> everyone / child / teen / young / 18+
-
-    Colors are fixed and legend clearly maps to True/False or categories.
+    
+    Colors are mapped explicitly for clarity.
     """
 
     filtered_df = df.copy()
@@ -311,41 +312,34 @@ def camembert_grouped(df, number, category_key, category_map, label_map=None, ex
 
     values = []
     labels = []
-    colors = []
 
     if category_key == "has_collections":
-        # True / False explicitly
         val_true = filtered_df["has_collections"].mean() * 100
         val_false = 100 - val_true
         values = [val_true, val_false]
-        labels = [f"{label_map[columns[0]] if label_map else columns[0]} True",
-                  f"{label_map[columns[0]] if label_map else columns[0]} False"]
-        colors = ['#4e79a7', '#f28e2b'] 
-
+        labels = [
+            f"{label_map[columns[0]] if label_map else columns[0]} True",
+            f"{label_map[columns[0]] if label_map else columns[0]} False"
+        ]
+        colors = ['#4e79a7', '#f28e2b']
     else:
-        # For multi-column groups (game_modes or age_ratings)
         for col in columns:
             val = filtered_df[col].mean() * 100
             values.append(val)
             labels.append(label_map[col] if label_map and col in label_map else col)
-        # Generate a color palette
-        cmap = plt.get_cmap('tab10')
-        colors = [cmap(i) for i in range(len(values))]
+        # Use a color palette
+        colors = px.colors.qualitative.Set3[:len(values)]
 
-    # Plot
-    fig, ax = plt.subplots(figsize=(6,6), dpi=100)
-    wedges = ax.pie(
-        values,
-        labels=None,
-        autopct='%1.1f%%',
-        startangle=90,
-        wedgeprops={'edgecolor':'white', 'linewidth':1},
-        colors=colors,
-        textprops={'fontsize':12, 'color':'black'}
+    # Create Plotly Express pie chart
+    fig = px.pie(
+        names=labels,
+        values=values,
+        color=labels,
+        color_discrete_sequence=colors,
+        title=f"{category_key.replace('_',' ').title()} - Top {number}"
     )
 
-    # Add a legend
-    ax.legend(wedges, labels, title=category_key.replace("_"," ").title(), bbox_to_anchor=(1,0.5), fontsize=12)
-    ax.set_title(f"{category_key.replace('_',' ').title()} - Top {number}", fontsize=14, weight='bold')
-    plt.tight_layout()
+    fig.update_traces(textinfo='percent+label', textfont_size=12, marker=dict(line=dict(color='white', width=1)))
+    fig.update_layout(title_font_size=16, title_font_family="Arial", legend_title_text=category_key.replace("_"," ").title())
+    
     return fig

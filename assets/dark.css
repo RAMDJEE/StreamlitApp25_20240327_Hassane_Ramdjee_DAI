@@ -1,4 +1,4 @@
-/* Intro/Overview page CSS */
+/* Intro/Overview page CSS - dark mode */
 
 /* Intro */
 .st-key-intro {
@@ -8,20 +8,21 @@
     text-align: center;
     padding: 2rem;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #333333;
+    color: #f0f0f0;
+    background-color: transparent;
 }
 
 .st-key-intro .st-emotion-cache-3uj0rx h1 {
     font-size: 3rem;
     font-weight: 700;
-    color: #1f77b4; 
+    color: #4da3ff; /* bleu plus clair pour fond sombre */
     margin-bottom: 0rem;
 }
 
 .st-key-intro .st-emotion-cache-3uj0rx h3 {
     font-size: 2.2rem;       
     font-weight: 700;       
-    color: #ff7f0e;         
+    color: #ffa640;         
     margin-bottom: 1rem;
     margin-top: 0;
     text-transform: uppercase; 
@@ -31,7 +32,7 @@
 .st-key-intro .st-emotion-cache-3uj0rx p {
     font-size: 1.1rem;
     line-height: 1.6;
-    color: #444444;
+    color: #d0d0d0;
 }
 
 .st-key-random button {
@@ -47,8 +48,8 @@
 }
 
 
-/* search section */
-.st-key-zone-jeu{
+/* Search section */
+.st-key-zone-jeu {
     width: 50vw;
     max-width: 700px; 
     margin-left: auto;
@@ -56,7 +57,7 @@
     text-align: center;
     padding: 2rem;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #333333;
+    color: #f0f0f0;
     display: flex;
     justify-content: center; 
     align-items: center;      
@@ -82,17 +83,23 @@
     display: inline-block;
     white-space: nowrap;
     flex: 0 0 auto; 
+    color: #f5f5f5;
 }
 
 .st-key-search input {
     flex: 1 1 auto; 
     min-width: 200px; 
+    background-color: #1e1e1e;
+    color: #f5f5f5;
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 6px 10px;
 }
 
 .results-count {
     display: inline-block;
-    background-color: #eaf7e9;
-    color: #1f7724;
+    background-color: #1f7724;
+    color: #eaf7e9;
     padding: 0.5rem 1rem;
     border-radius: 10px;
     font-weight: 600;
@@ -102,8 +109,8 @@
 }
 
 .no-results {
-    background-color: #fce4e4;
-    color: #a94442;
+    background-color: #a94442;
+    color: #fce4e4;
     padding: 0.5rem 1rem;
     border-radius: 10px;
     font-weight: 600;
@@ -122,15 +129,15 @@
     text-align: center;
     padding: 2rem;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #333333;
+    color: #f0f0f0;
     display: flex;
     flex-direction: column; 
     justify-content: center; 
     align-items: center;      
     gap: 1.5rem;
-    background-color: #f5f5f5; 
+    background-color: #1c1c1c; 
     border-radius: 15px;       
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
+    box-shadow: 0 4px 12px rgba(255,255,255,0.05); 
     transition: transform 0.2s ease; 
 }
 
@@ -141,7 +148,7 @@
 .st-ket-image {
     max-width: 100%;
     height: auto;
-    border-radius: 8 px;
+    border-radius: 8px;
 }
 
 .st-key-game .st-emotion-cache-3uj0rx h3 {
@@ -149,10 +156,11 @@
     font-weight: 700;       
     text-transform: uppercase; 
     letter-spacing: 1px; 
+    color: #4da3ff;
 }
 
 
-/* Button */
+/* Buttons */
 .st-key-explore_btn button {
     background-color: #4e79a7;
     color: white;
@@ -182,16 +190,20 @@
     flex-direction: row; 
     align-items: center;
     justify-content: center; 
-    align-items: center;
 }
 
 
 /* Navigation */
-
 .st-emotion-cache-tn0cau {
     align-items: center;
 }
 
 .st-emotion-cache-tn0cau > div {
     width: 100%; 
+}
+
+/* Global background */
+body, .stApp {
+    background-color: #121212 !important;
+    color: #f0f0f0 !important;
 }
