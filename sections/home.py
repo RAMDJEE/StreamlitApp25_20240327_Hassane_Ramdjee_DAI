@@ -17,7 +17,10 @@ def show_home(df,COLORS):
             In this Streamlit app, we explore and analyze how video games have evolved throughout the 21st century,  to better understand the new face of an industry constantly reinventing itself.
 
             **In this first section, feel free to explore the dataset.**
-                                        
+
+            For a quick tutorial on how to navigate this dashboard, watch this video: 
+            [Video tutorial](https://youtu.be/bIt-iwniWTw?si=V023xbGuN0zJjiz8) 
+
             <p style="font-style: italic; color: {COLORS['subtext']}; margin-top: 10px;">
             Note: in our database, we have main games, remakes, remasters, and standalones, but not ports. Therefore, all definitive editions or simple PC ports are not included.
             </p>

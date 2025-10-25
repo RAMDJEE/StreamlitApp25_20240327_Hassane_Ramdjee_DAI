@@ -42,8 +42,8 @@ def show_quantity(df,COLORS):
         Before anything else, it is important to examine the number of games released each year, as this will serve as our baseline.  
         Initially, we considered **all the games in our database** to see how many were released per year (represented by the green graph). However, a major issue immediately arose: why was there such a huge spike around 2017? The data was clearly inconsistent.  
 
-        To address this, we then focused **only on games with 100% internationally recognized ratings**, i.e., those with reliable votes. This produced a more coherent graph (shown in red), although the spike between 2015 and 2018 still persisted, albeit less pronounced.  
-        This red graph represents our **primary working dataset**—it is the most reliable and consistent source we have.  
+        To address this, we then focused **only on games with 100% internationally recognized ratings**, i.e., those with reliable votes. This produced a more coherent graph (shown in red), although the spike between 2015 and 2018 still persisted, albeit less pronounced.
+        This red graph represents our **primary working dataset**: it is the most reliable and consistent source we have.  
 
         Nevertheless, it was still interesting to compare with **the true values from IGDB**, the source of our database. This time, we collected **all games**, still applying the filter by game type (excluding ports and DLCs), but removing the rating filter: so even unrated games were included. This resulted in the blue graph, which shows a clear, continuous increase in releases over time.  
 

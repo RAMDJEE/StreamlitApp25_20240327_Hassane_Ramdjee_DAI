@@ -164,7 +164,7 @@ def show_map(df,COLORS):
                     <li><strong>Choose a console family</strong>: restrict the dataset to Nintendo, PlayStation, or Xbox platforms.</li>
                     <li><strong>Enable “Only exclusives”</strong>: display games released solely on the selected console family.</li>
                     <li><strong>Include PC releases</strong>: when enabled, games released both on PC and a single console are still considered as “exclusives”.</li>
-                    <li><strong>Activate backward compatibility</strong>: include titles that were released on previous generations of the selected platform family.</li>
+                    <li><strong>Activate Cross-generation</strong>: include titles that were released on previous or/and next generations of the selected platform family.</li>
                     <li><strong>Pick a specific platform</strong>: narrow down results to one console (e.g., PS4, Switch, Xbox 360, etc.).</li>
                     <li><strong>Explore a category</strong>: analyze by genres, age ratings, or game type.</li>
                     <li><strong>Activate all options</strong>: get a complete overview without any filter.</li>
@@ -236,7 +236,7 @@ def show_map(df,COLORS):
         
         is_platform = st.checkbox("All platform of this family?", disabled=platform_fam_all, value=True)
         selected_platform = st.selectbox("Select a platform:", all_platforms, disabled=is_platform)
-        full_exclu = st.checkbox("Backward compatibility?", disabled=is_platform)
+        full_exclu = st.checkbox("Cross-generation?", disabled=is_platform)
 
     with col1:
         df_final = df.copy()  
